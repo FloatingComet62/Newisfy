@@ -27,13 +27,34 @@ def get_news_from_topic(topic, limit=10):
     cards = soup.find_all("div", class_="news-card")
     news = []
     for card in cards:
+        title = card.find(class_='news-card-title')
+        title = title.find('a').text.strip() if title else ""
+
+        image = card.find(class_='news-card-image')
+        image = image['style'].split("'")[1] if image else ""
+
+        summary = card.find(class_='news-card-content')
+        summary = summary.find('div').text if summary else ""
+
+        author = card.find(class_='author')
+        author = author.text if author else ""
+
+        date = card.find(clas='date')
+        date = date.text if date else ""
+
+        time = card.find(class_='time')
+        time = time.text if time else ""
+
+        link = card.find(class_='read-more')
+        link = link.find('a').get('href') if link else ""
+
         news.append({
-            "title": card.find("div", class_="news-card-title").find('a').text.strip(),
-            'author': card.find(class_='author').text,
-            "on": card.find(clas='date').text + ", " + card.find(class_='time').text,
-            "summary": card.find(class_='news-card-content').find('div').text,
-            "image": card.find(class_='news-card-image')['style'].split("'")[1],
-            "link": card.find(class_='read-more').find('a').get('href'),
+            'title': title,
+            'image': image,
+            'content': summary,
+            'author': author,
+            'date': f"{date}, {time}",
+            'link': link
         })
     return random.sample(news, min(limit, len(news)))
 
