@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import bs4
 import requests
 import random
+import sys
 
 app = Flask(__name__)
 
@@ -64,9 +65,13 @@ def home():
 @app.route("/get_news")
 def get_news_route():
     try:
-        preferences = request.get_json()["preferences"]
-        return jsonify(get_news(preferences))
+        data = request.args.get("preferences")
+        preferences = data.split(",")
+        news = get_news(preferences)
+        return jsonify(news)
     except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(exc_type, exc_tb.tb_lineno)
         return jsonify({"error": str(e)})
 
 
