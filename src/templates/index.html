@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Newsify</title>
-    <link rel="stylesheet" href="/static/styles/index.css">
+    <link rel="stylesheet" href="/static/styles/index.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"
+    />
+  </head>
+  <body>
     <script>
-        $.ajax({
-            url: '/get_news',
-            type: 'GET',
-            data: "preferences=science,technology,business,sports",
-            success: function(response) {
-                console.log(response)
-                load_news(response)
-            }   
-        });
-        function load_news(news){
-            for(let i=0; i<news.length; i++) {
-                const news_item = news[i];
-                const html = `
-                <div class="box">
+      $.ajax({
+        url: "/get_news",
+        type: "GET",
+        data: "preferences=science,technology,business,sports",
+        success: function (response) {
+          console.log(response);
+          load_news(response);
+        },
+      });
+      function load_news(news) {
+        $(".boxes").html("");
+        for (let i = 0; i < news.length; i++) {
+          const news_item = news[i];
+          const html = `
+                <a href=${news_item.link}>
+                  <div class="box">
                     <img src=${news_item.image} alt="Image">
-                    <div class="heading">${news_item.title}</div>
-                    <div class="content">${news_item.content}</div>
-                    <div class="footer">
+                    <section>
+                      <div class="heading">${news_item.title}</div>
+                      <div class="content">${news_item.content}</div>
+                      <div class="footer">
                         <div>${news_item.author}</div>
                         <div>${news_item.date}</div>
-                    </div>
-                </div>
+                      </div>
+                    </section>
+                  </div>
+                </a>
                 `;
-                $('.boxes').append(html);
-                console.log(html);
-            }
-            console.log($('#boxes').children().length);
+          $(".boxes").append(html);
         }
+      }
     </script>
     <div class="title">Newsify</div>
-    <div class="boxes">
-    </div>
-</body>
+    <div class="boxes">Loading...</div>
+  </body>
 </html>
